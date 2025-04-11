@@ -12,7 +12,7 @@ import {
 import WebSocket, { WebSocketServer } from 'ws';
 import { nanoid } from 'nanoid';
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8742;
+const PORT = process.env.WS_PORT ? parseInt(process.env.WS_PORT) : 8742;
 
 const ENABLE_LOGGING = process.env.ENABLE_LOGGING === 'true';
 export function log(...args: any[]) {
