@@ -17,7 +17,7 @@ const PORT = process.env.WS_PORT ? parseInt(process.env.WS_PORT) : 8742;
 const ENABLE_LOGGING = process.env.ENABLE_LOGGING === 'true';
 export function log(...args: any[]) {
   if (ENABLE_LOGGING) {
-    console.warn(...args);
+    console.log(...args);
   }
 }
 
@@ -31,7 +31,7 @@ async function runServer() {
   const server = new Server(
     {
       name: 'expandor-mcp',
-      version: '0.1.0',
+      version: '0.1.1',
     },
     {
       capabilities: {
@@ -105,7 +105,6 @@ async function runServer() {
             if (success) {
               roundTripRegistry.delete(id);
               handler.resolve(data);
-              log(data);
             } else {
               roundTripRegistry.delete(id);
               handler.reject(error);
@@ -301,9 +300,10 @@ async function runServer() {
     const resp = await callExpandor({
       type: "call_tool",
       params: request.params
-    }) as { content: Array<object> };
+    }) as { content: Array<object>, success: boolean };
 
     return {
+      isError: !resp.success,
       content: resp.content,
     };
   });
@@ -320,9 +320,22 @@ async function runServer() {
   }
 
   log("Expandor MCP Server running on stdio");
+
+  return () => {
+    server.close();
+    wss.close();
+    log("Server closed");
+  }
 }
 
 // Start the server
-runServer().catch(error => {
+const close_handler = runServer().catch(error => {
   log("Server failed to start:", error);
+})
+
+// On SIGINT, close the server
+process.on('SIGINT', async () => {
+  log("SIGINT received, closing server...");
+  (await close_handler as () => void)()
+  process.exit(0);
 });
