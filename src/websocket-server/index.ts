@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -31,7 +32,7 @@ async function runServer() {
   const server = new Server(
     {
       name: 'expandor-mcp',
-      version: "0.1.2"
+      version: "0.2.0"
     },
     {
       capabilities: {
@@ -150,7 +151,13 @@ async function runServer() {
 
   wss.on('connection', (ws) => {
     log('Client connected');
-    expandor_ws = ws;
+    if(expandor_ws != null) {
+      log("Already connected to a client");
+      ws.close(409, "Already connected to a client");
+      return;
+    } else {
+      expandor_ws = ws;
+    }
 
     ws.on('message', (message) => {
       handleWebSocketMessage({ message, ws });
