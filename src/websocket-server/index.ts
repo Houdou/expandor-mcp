@@ -32,7 +32,7 @@ async function runServer() {
   const server = new Server(
     {
       name: 'expandor-mcp',
-      version: "0.2.1"
+      version: "0.2.2"
     },
     {
       capabilities: {
@@ -153,7 +153,7 @@ async function runServer() {
     log('Client connected');
     if(expandor_ws != null) {
       log("Already connected to a client");
-      ws.close(409, "Already connected to a client");
+      ws.close(1001, "Already connected to a client");
       return;
     } else {
       expandor_ws = ws;
