@@ -1,19 +1,19 @@
 {
   "name": "expandor-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Houdou"
   },
   "license": "UNLICENSED",
   "type": "module",
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.8.0",
     "@types/node": "^22.14.0",
     "@types/ws": "^8.18.1",
-    "typescript": "^5.8.2",
-    "ws": "^8.18.1"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "ws": "^8.18.1",
     "nanoid": "^5.1.5"
   },
   "scripts": {
